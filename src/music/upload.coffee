@@ -2,7 +2,7 @@ fs      = require "fs"
 process = require "process"
 crypto  = require "crypto"
 
-class Upload
+module.exports = class Upload
   constructor: (@dir) ->
     @shasum = crypto.createHash "sha1"
     @path   = [@dir, "tmp", process.pid, "-upload-", (new Date()).getTime()].join("/")

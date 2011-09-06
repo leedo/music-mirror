@@ -1,6 +1,7 @@
-fs      = require "fs"
+fs   = require "fs"
+path = require "path"
 
-class Storage
+module.exports = class Storage
   constructor: (@dir) ->
     for dir in [@dir, "#{dir}/tmp", "#{dir}/data"]
       fs.mkdirSync(dir, 0755) unless path.existsSync(dir)

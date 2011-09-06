@@ -1,0 +1,97 @@
+<style type="text/css">
+  body {
+    font-family: sans-serif;
+  }
+  #wizard {
+    width: 500px;
+    margin: 0 auto;
+  }
+  input, label {
+    display: block;
+  }
+  .file-wrapper {
+    position: relative;
+    width: 100px;
+    float: left;
+  }
+  .file-wrapper #file-select {
+    opacity: 0;
+    width: 100px;
+    z-index: 2;
+  }
+  .file-wrapper button {
+    width: 100px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+  #send-files {
+    float: left;
+    width: 100px;
+    margin-left: 1em;
+    display: none;
+  }
+  #files {
+    clear: both;
+    margin: 0;
+    padding: 1em 0;
+    list-style: none;
+  } 
+  #files li {
+    border-bottom: 1px solid #eee;
+    padding: 3px 0;
+    font-size: 0.8em;
+  }
+  #files li span {
+    color: #999;
+    float: right;
+  }
+  #files li:last-child {
+    border-bottom: none;
+  }
+</style>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.0.0/prototype.js"></script>
+<script type="text/javascript">
+  document.observe("dom:loaded", function() {
+    $("file-select").observe("change", function(e) {
+      var list = $('files');
+      $A(this.files).each(function(file) {
+        var li = new Element("LI");
+        li.update(file.fileName + " <span>" + Math.round(file.fileSize / 1024) + "KB</span>");
+        li.getStorage().set("file", file);
+        files.insert(li);
+      });
+
+      $('send-files').setStyle({
+        display: files.down('li') ? "block" : "none"
+      });
+    });
+  });
+</script>
+
+<ol id="wizard">
+  <li>
+    <h2>Album info</h2>
+    <form action="/album" method="post">
+      <label for="artist_name">Artist name</label>
+      <input type="text" id="artist_name">
+      
+      <label for="album_name">Album name</label>
+      <input type="text" id="album_name">
+
+      <label for="album_year">Album year</label>
+      <input type="text" id="album_year">
+    </form>
+  </li>
+  <li>
+    <h2>Album files</h2>
+    <div class="file-wrapper">
+      <button>Add files</button>
+      <input type="file" multiple id="file-select">
+    </div>
+    <button id="send-files">Upload files</button>
+    <ul id="files">
+    </ul>
+  </li>
+</ol>
