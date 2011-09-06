@@ -1,23 +1,23 @@
 sqlite = require "sqlite3"
 
 class Index
-  constructor (@dbfile) ->
+  constructor: (@dbfile) ->
     exists = path.existsSync @dbfile
     @db = new sqlite.Database @dbfile
     @create() unless exists
 
-  addfile (hash, meta, album) ->
+  addfile: (hash, meta, album) ->
     @db.run "INSERT INTO file (hash,album) VALUES(?,?)", hash, album, ->
       if meta
         @setmeta(this.lastID, k, v) for k,v of meta
 
-  setmeta (file, field, value) ->
+  setmeta: (file, field, value) ->
     @db.run "INSERT INTO meta (file,field,value) VALUES(?,?,?)", file, field, value
 
-  clearmeta (file) ->
+  clearmeta: (file) ->
     @db.run "DELETE FROM meta WHERE id=?", file
 
-  create ->
+  create: ->
     @db.run "CREATE TABLE file (
       id INT PRIMARY KEY,
       hash TEXT UNIQUE,
